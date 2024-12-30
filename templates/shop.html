@@ -19,18 +19,18 @@
             </nav>
         </header>
         <main>
-            <div class="Produce">
+            <div class="produce">
                 <div class="date">
                     <h1>Produce</h1>
-                    <p><strong>Fresh</strong>- August 21, 2023</p>
+                    <p><strong>Fresh</strong>  —  August 21, 2023</p>
                 </div>
                 <div class="sort">
-                    <button>Default</button>
+                    <button class="active">Default</button>
                     <button>A-Z</button>
                     <button>List view</button>
                 </div>
-                <hr>
             </div>
+            <hr width="90%">
             <div class="shop"></div>
             <div class="pagination">
                 <a href="#">&larr; Previous</a>
@@ -61,10 +61,18 @@
                 <p>Subscribe for freshest news</p>
                 <form action="">
                     <input type="text" placeholder="you@example.com">
-                    <button>Subscribe</button>
+                    <button class="active">Subscribe</button>
                 </form>
             </div>
         </footer>
     </body>
+    <template id="product">
+        <div class="product">
+            <div><img src="/static/images/product1.png" alt="tomato"></div>
+            <p class="product-name">Heirloom tomato</p>
+            <p class="product-price">$5.99 / lb</p>
+            <p class="product-desc">Grown in San Juan Capistrano, CA</p>
+        </div>
+    </template>
     <script src="/static/script.js"></script>
 </html>
