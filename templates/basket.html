@@ -4,10 +4,78 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/style.css">
-        <title>Document</title>
+        <title>Basket</title>
     </head>
     <body>
-        
+        <header>
+            <a class="logo" href="/templates/home.html">World Peas</a>
+            <nav class="navigation">
+                <ul>
+                    <li class="li-shop"><a href="/templates/shop.html">Shop</a></li>
+                    <li class="li-who"><a href="/templates/home.html">Who we are</a></li>
+                    <li class="li-prof"><a href="/templates/sign-in.html">My profile</a></li>
+                    <li class="li-basket"><a href="/templates/basket.html">Basket (3)</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="title">
+                <div>
+                    <h1>Basket</h1>
+                    <p>3 items</p>
+                </div>
+            </div>
+            <hr width="90%">
+            <div class="basket">
+                <div class="items"></div>
+                <div class="summary">
+                    <strong>Order summary</strong>
+                    <div><p>Subtotal</p><p>$27.44</p></div>
+                    <div><p>Shipping</p><p>$3.99</p></div>
+                    <div><p>Tax</p><p>$2.00</p></div>
+                    <div><p>Total</p><p>$33.43</p></div>
+                    <button class="active"><p>Continue to payment</p><p>&rarr;</p></button>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="copyright">
+                <p class="logo">World Peas</p>
+                <p>Copyright © 2024 World Peas, Inc.</p>
+            </div>
+            <div class="contacts">
+                <p>CONTACT US</p>
+                <div class="contacts-imgs">
+                    <img src="/static/images/Twitter.png" alt="">
+                    <img src="/static/images/Instagram.png" alt="">
+                    <img src="/static/images/YouTube.png" alt="">
+                    <img src="/static/images/LinkedIn.png" alt="">
+                </div>
+            </div>
+            <div class="subscribe">
+                <p>Subscribe for freshest news</p>
+                <form action="">
+                    <input type="text" placeholder="you@example.com">
+                    <button class="active">Subscribe</button>
+                </form>
+            </div>
+        </footer>
     </body>
-    <script src="/static/script.js"></script>
+    <template id="item">
+        <div class="item">
+            <img class="vegetable" src="/static/images/product1.png" alt="vegetable">
+            <div class="item-description">
+                <div class="name">
+                    <p>Heirloom tomato</p>
+                    <p>$5.99</p>
+                </div>
+                <p class="price">$5.99 / lb</p>
+                <div class="weight-lb">
+                    <input type="text" placeholder="1 lb">
+                    <img src="/static/images/pen.png" alt="">
+                </div>
+            </div>
+        </div>
+    </template>
+    <script src="/static/script2.js"></script>
 </html>

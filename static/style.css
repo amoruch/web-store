@@ -181,12 +181,12 @@ input[type="text"], input[type="email"], input[type="password"] {
     }
 }
 
-.produce {
+.title {
     display: flex;
     flex-direction: row;
     width: 90%;
     justify-content: space-between;
-    .date {
+    div {
         display: flex;
         align-items: flex-end;
         p, h1 {
@@ -196,6 +196,103 @@ input[type="text"], input[type="email"], input[type="password"] {
     }
     button {
         border-radius: 1rem;
+    }
+}
+
+.basket {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.item {
+    background-color: rgb(66, 107, 31, 0.1);
+    margin: 0 2rem 2rem 0;
+    width: 36rem;
+    height: 9rem;
+    display: flex;
+    border: 2px solid lightgray;
+    border-radius: 1rem;
+    .vegetable {
+        background: rgb(50, 50, 50, 0.1);
+        border-radius: 1rem 0 0 1rem;
+    }
+    .item-description {
+        width: 100%;
+        padding: 1rem;
+        p {
+            margin: 0;
+        }
+        .name {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            font-weight: bolder;
+            font-size: 1.2rem;
+        }
+        .price {
+            color: #426B1F;
+            margin-top: 0.2rem;
+            font-weight: bolder;
+            font-size: 1.5rem;
+        }
+        .weight-lb {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 1rem;
+            input {
+                width: 6rem;
+                border: 2px solid lightgray;
+                border-radius: 1rem;
+                background: rgb(255, 255, 255, 0.4);
+            }
+            input:focus {
+                outline: none;
+            }
+            img {
+                margin-left: -2.5rem;
+            }
+        }
+    }
+}
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 2px solid lightgray;
+    border-radius: 2rem;
+    background: rgb(66, 107, 31, 0.1);
+    padding: 1rem;
+    width: 20rem;
+    font-size: 16px;
+    p, strong {
+        margin: 0;
+    }
+    strong {
+        font-size: 20px;
+        padding: 0.6rem 0 1rem 0;
+    }
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 20rem;
+        margin: 0.5rem 0 0.5rem 0;
+    }
+    button {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+        margin-top: 1rem;
+        padding: 0.8rem 1rem 0.8rem 1rem;
+        p {
+            margin: 0;
+        }
     }
 }
 
