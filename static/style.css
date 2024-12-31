@@ -31,6 +31,10 @@ button.active {
     border: 0;
 }
 
+button.active:hover {
+    cursor: pointer;
+}
+
 button {
     color: black;
     background: None;
@@ -81,7 +85,7 @@ main {
             font-size: 4em;
             margin: 0;
         }
-        button {
+        a {
             border: 0;
             border-radius: 0.5em;
             background-color: #426B1F;
@@ -196,6 +200,7 @@ input[type="text"], input[type="email"], input[type="password"] {
     }
     button {
         border-radius: 1rem;
+        cursor: pointer;
     }
 }
 
@@ -284,12 +289,14 @@ input[type="text"], input[type="email"], input[type="password"] {
         width: 20rem;
         margin: 0.5rem 0 0.5rem 0;
     }
-    button {
+    a {
         display: flex;
         justify-content: space-between;
         width: 90%;
         margin-top: 1rem;
         padding: 0.8rem 1rem 0.8rem 1rem;
+        border-radius: 1rem;
+        cursor: pointer;
         p {
             margin: 0;
         }
@@ -350,11 +357,9 @@ input[type="text"], input[type="email"], input[type="password"] {
         text-decoration: none;
         border-radius: 5px;
     }
-    a.active {
-        background-color: #426B1F;
-        color: white;
-    }
-    a:hover:not(.active) {
-        background-color: #ddd;
-    }
+}
+
+a.active {
+    background-color: #426B1F;
+    color: white;
 }
