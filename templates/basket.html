@@ -7,17 +7,7 @@
         <title>Basket</title>
     </head>
     <body>
-        <header>
-            <a class="logo" href="/templates/home.html">World Peas</a>
-            <nav class="navigation">
-                <ul>
-                    <li class="li-shop"><a href="/templates/shop.html">Shop</a></li>
-                    <li class="li-who"><a href="/templates/home.html">Who we are</a></li>
-                    <li class="li-prof"><a href="/templates/sign-in.html">My profile</a></li>
-                    <li class="li-basket"><a href="/templates/basket.html">Basket (3)</a></li>
-                </ul>
-            </nav>
-        </header>
+        <my-header></my-header>
         <main>
             <div class="title">
                 <div>
@@ -38,28 +28,7 @@
                 </div>
             </div>
         </main>
-        <footer>
-            <div class="copyright">
-                <p class="logo">World Peas</p>
-                <p>Copyright © 2024 World Peas, Inc.</p>
-            </div>
-            <div class="contacts">
-                <p>CONTACT US</p>
-                <div class="contacts-imgs">
-                    <img src="/static/images/contacts/Twitter.png" alt="">
-                    <img src="/static/images/contacts/Instagram.png" alt="">
-                    <img src="/static/images/contacts/YouTube.png" alt="">
-                    <img src="/static/images/contacts/LinkedIn.png" alt="">
-                </div>
-            </div>
-            <div class="subscribe">
-                <p>Subscribe for freshest news</p>
-                <form action="">
-                    <input type="text" placeholder="you@example.com">
-                    <button class="active">Subscribe</button>
-                </form>
-            </div>
-        </footer>
+        <my-footer></my-footer>
     </body>
     <template id="item">
         <div class="item">
@@ -77,5 +46,6 @@
             </div>
         </div>
     </template>
-    <script src="/static/script2.js"></script>
+    <script src="/static/HeaderFooter.js"></script>
+    <script src="/static/basket.js"></script>
 </html>

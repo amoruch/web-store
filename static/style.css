@@ -23,6 +23,7 @@ img {
 .logo {
     color: #426B1F;
     font-size: 2rem;
+    cursor: pointer;
 }
 
 button.active {
@@ -47,7 +48,7 @@ button {
     width: auto;
 }
 
-header {
+my-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -118,7 +119,7 @@ main {
     }
 }
 
-footer {
+my-footer {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -316,7 +317,7 @@ input[type="text"], input[type="email"], input[type="password"] {
         min-width: 15rem;
         max-width: 25rem;
         background-color: rgb(66, 107, 31, 0.1);
-        div {
+        .product-img {
             display: flex;
             justify-content: center;
             height: 16rem;
@@ -343,6 +344,14 @@ input[type="text"], input[type="email"], input[type="password"] {
             color: #6D6D6D;
             font-size: 1rem;
             margin-bottom: 1rem;
+        }
+        .add-but {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        button {
+            margin: 0 0 0.5rem 0;
         }
     }
 }
