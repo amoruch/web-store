@@ -372,3 +372,25 @@ a.active {
     background-color: #426B1F;
     color: white;
 }
+
+.profile {
+    height: 27rem;
+    display: flex;
+    align-items: center;
+    .info div {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        input {
+            margin: 0.5rem 2rem 0.5rem 2rem;
+        }
+    }
+    .profile-but {
+        display: flex;
+        flex-direction: column;
+        button {
+            margin: 1.5rem;
+            padding: 0.8rem 1.5rem 0.8rem 1.5rem;
+        }
+    }
+}
