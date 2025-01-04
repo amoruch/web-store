@@ -33,7 +33,7 @@ class MyFooter extends HTMLElement {
             <div class="subscribe">
                 <p>Subscribe for freshest news</p>
                 <form action="">
-                    <input type="text" placeholder="you@example.com">
+                    <input type="text" name="email" placeholder="you@example.com">
                     <button class="active">Subscribe</button>
                 </form>
             </div>

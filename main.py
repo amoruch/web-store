@@ -22,15 +22,19 @@ def api_customers():
     connection.close()
     return jsonify(res)
 
-@app.route('/customer', methods=["POST"])
+@app.route('/api/auth/register', methods=["POST"])
 def add_customer():
+    # user data
+    data = request.get_json()
+    name, email, password = data["name"], data["email"], data["password"]
+
     # getting cursor
     params = config()
     connection = psycopg2.connect(**params)
     cursor = connection.cursor()
 
     # creating new user
-    query = "INSERT INTO customers(name, email) VALUES ('roman', 'aboba@e.huy')"
+    query = f"INSERT INTO customers(name, email, password) VALUES ('{name}', '{email}', '{password}')"
     cursor.execute(query)
     connection.commit() # updating table
 
