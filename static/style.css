@@ -172,7 +172,7 @@ input[type="text"], input[type="email"], input[type="password"] {
     background: None;
 }
 
-.sign-in {
+.sign-in, .sign-up {
     display: flex;
     flex-direction: column;
     width: auto;

@@ -9,17 +9,21 @@
     <body>
         <my-header></my-header>
         <main>
-            <form class="sign-in">
-                <h1>Sign in</h1>
+            <p>{{ message }}</p>
+            <form action="" method="post" class="sign-up">
+                <h1>Sign up</h1>
                 <p>Username</p>
-                <input type="text" name="name" placeholder="name">
+                <input type="text" name="login" placeholder="name">
+                <p>Email</p>
+                <input type="email" name="email" placeholder="you@gmail.com">
                 <p>Password</p>
-                <input type="password" name="password" placeholder="********">
+                <input type="password" name="password1" placeholder="********">
+                <p>Confirm password</p>
+                <input type="password" name="password2" placeholder="********">
                 <button type="submit" class="active">Sign in</button>
             </form>
         </main>
         <my-footer></my-footer>
     </body>
     <script src="/static/HeaderFooter.js"></script>
-    <script src="/static/sign-in.js"></script>
 </html>

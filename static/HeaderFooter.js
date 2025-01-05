@@ -4,10 +4,11 @@ class MyHeader extends HTMLElement {
             <a class="logo" href="/templates/home.html">World Peas</a>
             <nav class="navigation">
                 <ul>
-                    <li class="li-shop"><a href="/templates/shop.html">Shop</a></li>
-                    <li class="li-who"><a href="/templates/home.html">Who we are</a></li>
-                    <li class="li-prof"><a href="/templates/sign-in.html">My profile</a></li>
-                    <li class="li-basket"><a href="/templates/basket.html">Basket (3)</a></li>
+                    <li class="li-shop"><a href="/shop">Shop</a></li>
+                    <li class="li-who"><a href="/home">Who we are</a></li>
+                    <li class="li-prof"><a href="/profile">My profile</a></li>
+                    <li class="li-prof"><a href="/sign-up">Sign up</a></li>
+                    <li class="li-basket"><a href="/basket">Basket (3)</a></li>
                 </ul>
             </nav>
         `
