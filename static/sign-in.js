@@ -4,20 +4,23 @@ async function submit(event) {
     event.preventDefault();
     try {
         let form = document.forms[0];
-        let login = form.elements.name.value;
+        let login = form.elements.login.value;
         let password = form.elements.password.value;
-        
+
         let res = await fetch("/api/register", {
-            method: "GET",
-            body: JSON.stringify({
-                name: login,
-                password: password
-            }),
+            method: 'POST',
             headers: {
-                "Content-type": "application/json"
-            }
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify({
+                login: login,
+                password: password
+            })
         });
-        alert(res.status);
+
+        let json = await res.json();
+        let token = json.token
+        alert(token);
     } catch {
         alert("Something went wrong");
     }

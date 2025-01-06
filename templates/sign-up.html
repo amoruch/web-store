@@ -9,7 +9,9 @@
     <body>
         <my-header></my-header>
         <main>
-            <p>{{ message }}</p>
+            {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
             <form action="" method="post" class="sign-up">
                 <h1>Sign up</h1>
                 <p>Username</p>

@@ -80,7 +80,18 @@ def register(login, email, password):
 
 @app.route('/api/ping', methods=['GET'])
 def api_ping():
-    return jsonify("ok"), 200
+    return make_response("ok"), 200
+
+
+@app.route('/cookie/')
+def cookie():
+    cookie = request.cookies.get('foo')
+    if not cookie:
+        res = make_response("Setting a cookie")
+        res.set_cookie('foo', 'bar', max_age=60)
+    else:
+        res = make_response(f"Cookie value: {cookie}")
+    return res
 
 
 @app.route('/api/v1/customers/', methods=["GET"])
@@ -98,13 +109,24 @@ def api_customers():
     # closing cursor/connection
     cursor.close()
     connection.close()
-    return jsonify(res)
+    return make_response(res)
+
+
+@app.route('/sign-up', methods=["GET", "POST"])
+def sign_up():
+    message = ""
+
+    if request.method == "POST":
+        data = request.form
+        login, email, password = data.get("login"), data.get("email"), data.get("password1")
+        message, status = register(login, email, password)
+    return make_response(render_template("sign-up.html", message=message))
 
 
 @app.route('/api/register', methods=["GET"])
 def api_register():
     # user data
-    data = request.get_json()
+    data = request.form
     login, password = data["login"], data["password"]
 
     # creating cursor
@@ -116,11 +138,15 @@ def api_register():
     query = f"SELECT name FROM customers WHERE (name='{login}' AND password='{password}')"
     cursor.execute(query)
     res = len(cursor.fetchall())
+
+    # closing cursor/connection
+    cursor.close()
+    connection.close()
     if res == 0:
-        return jsonify({"reason": "wrong info"}), 400
+        return make_response(jsonify({"reason": "wrong info"}), 400)
 
     token = jwt.encode(payload={"login": login}, key="secret", algorithm="HS256")
-    return jsonify({"token": token}), 200
+    return make_response(jsonify({"token": token}), 200)
 
 
 @app.route('/api/my-profile', methods=["GET"])
@@ -140,32 +166,76 @@ def api_profile():
     query = f"SELECT name, email, password FROM customers WHERE (name='{login}')"
     cursor.execute(query)
     res = cursor.fetchone()
-    return jsonify(res), 200
+
+    # closing cursor/connection
+    cursor.close()
+    connection.close()
+    return jsonify({"login": res[0], "email": res[1], "password": res[2]}), 200
 
 
-@app.route('/sign-up', methods=["GET", "POST"])
-def sign_up():
-    message = ""
-
-    if request.method == "POST":
-        data = request.form
-        login, email, password = data.get("login"), data.get("email"), data.get("password1")
-        message, status = register(login, email, password)
-        print(message, status)
-    return render_template("sign-up.html", message=message)
-
-
-@app.route('/profile', methods=["GET, POST"])
+@app.route('/profile', methods=["GET", "POST"])
 def profile():
+    message = ""
     if request.method == "POST":
         data = request.form
         login, password = data.get("login"), data.get("password")
         
+        # creating cursor
+        params = config()
+        connection = psycopg2.connect(**params)
+        cursor = connection.cursor()
+
+        # checking if user already exists
+        query = f"SELECT name, email, password FROM customers WHERE (name='{login}' AND password='{password}')"
+        cursor.execute(query)
+        res = cursor.fetchall()
+
+        # closing cursor/connection
+        cursor.close()
+        connection.close()
+        if len(res) == 0:
+            message = "incorrect login or password"
+            return render_template("sign-in.html", message=message), 200
+        res = res[0]
+        token = jwt.encode(payload={"login": login}, key="secret", algorithm="HS256")
+        temp = render_template("profile.html", login=res[0], email=res[1], password=res[2])
+        res = make_response(temp, 200)
+        res.set_cookie("auth", "Bearer " + token)
+        return res
+        
     token = request.headers.get('Authorization')
 
     if token is None:
-        return render_template("sign-in.html")
-    return render_template("profile.html")
+        token = request.cookies.get("auth")
+    
+    if token is None:
+        return render_template("sign-in.html", message=message)
+    
+    payload, bol = get_token_payload(token)
+    if not bol:
+        return jsonify(payload), 400
+    login = payload["login"]
+
+    # creating cursor
+    params = config()
+    connection = psycopg2.connect(**params)
+    cursor = connection.cursor()
+
+    # checking if user already exists
+    query = f"SELECT name, email, password FROM customers WHERE (name='{login}')"
+    cursor.execute(query)
+    res = cursor.fetchall()
+
+    # closing cursor/connection
+    cursor.close()
+    connection.close()
+    
+    res = res[0]
+    return render_template("profile.html", login=res[0], email=res[1], password=res[2])
+
+@app.route('/shop', methods=["GET"])
+def shop():
+    return render_template("shop.html")
 
 if __name__ == '__main__':
     #port = int(os.environ.get("PORT", 5000))
