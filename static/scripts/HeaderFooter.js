@@ -1,12 +1,12 @@
 class MyHeader extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
-            <a class="logo" href="/templates/home.html">World Peas</a>
+            <a class="logo" href="/home">World Peas</a>
             <nav class="navigation">
                 <ul>
                     <li class="li-shop"><a href="/shop">Shop</a></li>
                     <li class="li-who"><a href="/home">Who we are</a></li>
-                    <li class="li-prof"><a href="/profile">My profile</a></li>
+                    <li class="li-prof"><a href="/sign-in">My profile</a></li>
                     <li class="li-prof"><a href="/sign-up">Sign up</a></li>
                     <li class="li-basket"><a href="/basket">Basket (3)</a></li>
                 </ul>
@@ -19,7 +19,7 @@ class MyFooter extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
             <div class="copyright">
-                <a class="logo" href="/templates/home.html">World Peas</a>
+                <a class="logo" href="/home">World Peas</a>
                 <p>Copyright © 2024 World Peas, Inc.</p>
             </div>
             <div class="contacts">

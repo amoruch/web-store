@@ -4,6 +4,7 @@ import psycopg2
 from config import config
 import re
 import jwt
+import time
 
 app = Flask(__name__)
 
@@ -28,6 +29,24 @@ def isGoodPassword(password):
         return False
     return True
 
+
+def is_user_exists(login):
+    # getting cursor
+    params = config()
+    connection = psycopg2.connect(**params)
+    cursor = connection.cursor()
+
+    # executing query
+    query = f"SELECT * FROM customers WHERE (name='{login}')"
+    cursor.execute(query)
+    res = cursor.fetchall() # getting the result
+
+    # closing cursor/connection
+    cursor.close()
+    connection.close()
+    return (len(res) > 0)
+
+
 def get_token_payload(token):
     if token == None:
         return "no token", False
@@ -35,16 +54,25 @@ def get_token_payload(token):
         return "no bearer", False
     token = token.replace("Bearer ", "")
 
-    # Проверяем валидность токена
+    # is token valid?
     try:
         payload = jwt.decode(jwt=token, key="secret", algorithms=['HS256', 'RS256'])
     except:
         return "invalid token", False
+    
+    a = is_user_exists(payload.get("login", "sinny"))
+    if not a:
+        return "user does not exist", False
+
+    # session ended
+    if payload.get("death_time", 0) < time.time():
+        return "session ended", False
     return payload, True
+
 
 def register(login, email, password):
     if login == None or email == None or password == None:
-        return "go fuck yourself", 400
+        return "something missing", 400
 
     # verify content
     if not(isCorrect(login, "[a-zA-Z0-9-]+") and 1 <= len(login) <= 30):
@@ -78,23 +106,13 @@ def register(login, email, password):
     connection.close()
     return "profile created", 201
 
+
 @app.route('/api/ping', methods=['GET'])
 def api_ping():
-    return make_response("ok"), 200
+    return jsonify("ok"), 200
 
 
-@app.route('/cookie/')
-def cookie():
-    cookie = request.cookies.get('foo')
-    if not cookie:
-        res = make_response("Setting a cookie")
-        res.set_cookie('foo', 'bar', max_age=60)
-    else:
-        res = make_response(f"Cookie value: {cookie}")
-    return res
-
-
-@app.route('/api/v1/customers/', methods=["GET"])
+@app.route('/api/customers/', methods=["GET"])
 def api_customers():
     # getting cursor
     params = config()
@@ -109,25 +127,38 @@ def api_customers():
     # closing cursor/connection
     cursor.close()
     connection.close()
-    return make_response(res)
+    return res
 
 
-@app.route('/sign-up', methods=["GET", "POST"])
+@app.route('/sign-up', methods=["GET"])
 def sign_up():
-    message = ""
+    return render_template("sign-up.html")
 
-    if request.method == "POST":
-        data = request.form
-        login, email, password = data.get("login"), data.get("email"), data.get("password1")
-        message, status = register(login, email, password)
-    return make_response(render_template("sign-up.html", message=message))
+# create new user
+@app.route('/api/sign-up', methods=["POST"])
+def api_sign_up():
+    data = request.get_json()
+    login, email, password = data.get("login"), data.get("email"), data.get("password1")
+    message, status = register(login, email, password)
+    return jsonify(message), status
 
 
-@app.route('/api/register', methods=["GET"])
+@app.route('/sign-in', methods=["GET"])
+def sign_in():
+    # if we have valid token, redirect to profile, else sign-in
+    token = request.cookies.get("auth")
+    if token != None:
+        payload, bol = get_token_payload(token)
+        if bol:
+            return redirect('/profile')
+    return render_template("sign-in.html")
+
+# gives user his auth token
+@app.route('/api/register', methods=["POST"])
 def api_register():
     # user data
-    data = request.form
-    login, password = data["login"], data["password"]
+    data = request.get_json()
+    login, password = data.get("login"), data.get("password")
 
     # creating cursor
     params = config()
@@ -143,85 +174,36 @@ def api_register():
     cursor.close()
     connection.close()
     if res == 0:
-        return make_response(jsonify({"reason": "wrong info"}), 400)
-
-    token = jwt.encode(payload={"login": login}, key="secret", algorithm="HS256")
-    return make_response(jsonify({"token": token}), 200)
-
-
-@app.route('/api/my-profile', methods=["GET"])
-def api_profile():
-    token = request.headers.get('Authorization')
-    payload, bol = get_token_payload(token)
-    if not bol:
-        return jsonify(payload), 400
-    login = payload["login"]
-
-    # creating cursor
-    params = config()
-    connection = psycopg2.connect(**params)
-    cursor = connection.cursor()
-
-    # getting user info
-    query = f"SELECT name, email, password FROM customers WHERE (name='{login}')"
-    cursor.execute(query)
-    res = cursor.fetchone()
-
-    # closing cursor/connection
-    cursor.close()
-    connection.close()
-    return jsonify({"login": res[0], "email": res[1], "password": res[2]}), 200
+        return jsonify({"reason": "wrong info"}), 400
+    
+    death_time = time.time() + 60
+    token = "Bearer " + jwt.encode(payload={"login": login, "death_time": death_time}, key="secret", algorithm="HS256")
+    return jsonify({"token": token}), 200
 
 
-@app.route('/profile', methods=["GET", "POST"])
+@app.route('/profile', methods=["GET"])
 def profile():
-    message = ""
-    if request.method == "POST":
-        data = request.form
-        login, password = data.get("login"), data.get("password")
-        
-        # creating cursor
-        params = config()
-        connection = psycopg2.connect(**params)
-        cursor = connection.cursor()
+    return render_template("profile.html")
 
-        # checking if user already exists
-        query = f"SELECT name, email, password FROM customers WHERE (name='{login}' AND password='{password}')"
-        cursor.execute(query)
-        res = cursor.fetchall()
-
-        # closing cursor/connection
-        cursor.close()
-        connection.close()
-        if len(res) == 0:
-            message = "incorrect login or password"
-            return render_template("sign-in.html", message=message), 200
-        res = res[0]
-        token = jwt.encode(payload={"login": login}, key="secret", algorithm="HS256")
-        temp = render_template("profile.html", login=res[0], email=res[1], password=res[2])
-        res = make_response(temp, 200)
-        res.set_cookie("auth", "Bearer " + token)
-        return res
-        
+# returns profile data using auth token
+@app.route('/api/profile', methods=["GET"])
+def api_profile():
     token = request.headers.get('Authorization')
 
     if token is None:
         token = request.cookies.get("auth")
     
-    if token is None:
-        return render_template("sign-in.html", message=message)
-    
     payload, bol = get_token_payload(token)
     if not bol:
         return jsonify(payload), 400
-    login = payload["login"]
+    login = payload.get("login")
 
     # creating cursor
     params = config()
     connection = psycopg2.connect(**params)
     cursor = connection.cursor()
 
-    # checking if user already exists
+    # finding this user
     query = f"SELECT name, email, password FROM customers WHERE (name='{login}')"
     cursor.execute(query)
     res = cursor.fetchall()
@@ -229,13 +211,47 @@ def profile():
     # closing cursor/connection
     cursor.close()
     connection.close()
-    
+
     res = res[0]
-    return render_template("profile.html", login=res[0], email=res[1], password=res[2])
+    return jsonify({"login": res[0], "email": res[1], "password": res[2]}), 200
+
+# delete user account
+@app.route('/api/delete-acc', methods=["DELETE"])
+def api_delete():
+    token = request.headers.get('Authorization')
+
+    if token is None:
+        token = request.cookies.get("auth")
+    
+    payload, bol = get_token_payload(token)
+    if not bol:
+        return jsonify(payload), 400
+    login = payload.get("login")
+
+    # creating cursor
+    params = config()
+    connection = psycopg2.connect(**params)
+    cursor = connection.cursor()
+
+    # deleting user
+    query = f"DELETE FROM customers WHERE (name='{login}')"
+    cursor.execute(query)
+    connection.commit()
+
+    # closing cursor/connection
+    cursor.close()
+    connection.close()
+    
+    return jsonify("user was successfully deleted"), 200
+
+@app.route('/home', methods=["GET"])
+def home():
+    return render_template("home.html")
 
 @app.route('/shop', methods=["GET"])
 def shop():
     return render_template("shop.html")
+
 
 if __name__ == '__main__':
     #port = int(os.environ.get("PORT", 5000))

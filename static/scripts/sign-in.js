@@ -17,10 +17,13 @@ async function submit(event) {
                 password: password
             })
         });
-
         let json = await res.json();
-        let token = json.token
-        alert(token);
+        if (res.status == 400) {
+            alert(json.reason)
+            return;
+        }
+        document.cookie = "auth=" + json.token;
+        window.location.replace("/profile")
     } catch {
         alert("Something went wrong");
     }

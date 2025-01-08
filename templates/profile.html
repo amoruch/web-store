@@ -19,24 +19,23 @@
                 <div class="info">
                     <div class="nickname-info">
                         <p>Nickname:</p>
-                        <p>{{ login }}</p>
+                        <input type="text" name="login" placeholder="Value">
                     </div>
                     <div class="email-info">
                         <p>Email:</p>
-                        <p>{{ email }}</p>
+                        <input type="text" name="email" placeholder="Value">
                     </div>
                     <div class="password-info">
                         <p>Password:</p>
-                        <p>{{ password }}</p>
+                        <input type="text" name="password" placeholder="Value">
                     </div>
                 </div>
-                <div class="profile-but">
-                    <button class="active">Delete account</button>
-                    <button class="active">Sign out</button>
-                </div>
+                <button onclick="delete_acc()" class="active">Delete account</button>
+                <button onclick="sign_out()" class="active">Sign out</button>
             </div>
         </main>
         <my-footer></my-footer>
     </body>
-    <script src="/static/HeaderFooter.js"></script>
+    <script src="/static/scripts/HeaderFooter.js"></script>
+    <script src="/static/scripts/profile.js"></script>
 </html>
