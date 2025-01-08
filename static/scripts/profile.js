@@ -32,4 +32,9 @@ async function delete_acc() {
     }
 }
 
+async function sign_out() {
+    document.cookie = "auth=";
+    window.location.replace("/sign-in")
+}
+
 f();
