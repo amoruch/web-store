@@ -272,7 +272,34 @@ def api_add_basket():
 
 @app.route('/basket', methods=["GET"])
 def basket():
-    return render_template("basket.html")
+    token = request.cookies.get("auth")
+    if token != None:
+        payload, bol = get_token_payload(token)
+        if bol:
+            return render_template("basket.html")
+    return render_template("sign-in.html")
+
+
+@app.route('/api/get-basket', methods=["GET"])
+def api_get_basket():
+    token = request.headers.get('Authorization')
+    if token is None:
+        token = request.cookies.get("auth")
+    
+    payload, bol = get_token_payload(token)
+    if not bol:
+        return jsonify({"res": payload}), 400
+    login = payload.get("login")
+
+    query = f"SELECT basket FROM customers WHERE (login='{login}')"
+    res = sql_query(query, fetch=True)[0]
+    M = res[0].split()
+
+    query = "SELECT name, price FROM products ORDER BY id"
+    res = sql_query(query, fetch=True)
+    
+    response = [{"id": int(i),"name": res[int(i) - 1][0], "price": res[int(i) - 1][1]}for i in M]
+    return jsonify(response), 200
 
 
 if __name__ == '__main__':

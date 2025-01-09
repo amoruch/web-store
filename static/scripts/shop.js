@@ -65,7 +65,12 @@ async function add_in_basket(param) {
         }).toString()
         let res = await fetch("/api/add-in-basket?" + params);
         let json = await res.json();
-        alert(json.res)
+        if (json.res == "no bearer") {
+            window.location.replace("/sign-in");
+        }
+        else {
+            alert(json.res)
+        }
     } catch {
         alert("Something went wrong");
     }

@@ -12,7 +12,7 @@
             <div class="title">
                 <div>
                     <h1>Basket</h1>
-                    <p>3 items</p>
+                    <p>items</p>
                 </div>
             </div>
             <hr width="90%">
@@ -20,10 +20,10 @@
                 <div class="items"></div>
                 <div class="summary">
                     <strong>Order summary</strong>
-                    <div><p>Subtotal</p><p>$27.44</p></div>
+                    <div><p>Subtotal</p><p id="subtotal">$27.44</p></div>
                     <div><p>Shipping</p><p>$3.99</p></div>
                     <div><p>Tax</p><p>$2.00</p></div>
-                    <div><p><strong>Total</strong></p><p><strong>$33.43</strong></p></div>
+                    <div><p><strong>Total</strong></p><p><strong id="total">$33.43</strong></p></div>
                     <a href="#" class="active"><p>Continue to payment</p><p>&rarr;</p></a>
                 </div>
             </div>
@@ -32,15 +32,15 @@
     </body>
     <template id="item">
         <div class="item">
-            <img class="vegetable" src="/static/images/products/product1.png" alt="vegetable">
+            <div class="vegetable"><img class="veg_img" src="/static/images/products/product1.png" alt="vegetable"></div>
             <div class="item-description">
                 <div class="name">
-                    <p>Heirloom tomato</p>
-                    <p>$5.99</p>
+                    <p class="product-name">Heirloom tomato</p>
+                    <p class="product-final-price">$5.99</p>
                 </div>
                 <p class="price">$5.99 / lb</p>
                 <div class="weight-lb">
-                    <input type="text" placeholder="1 lb">
+                    <input type="number" placeholder="1 lb">
                     <img src="/static/images/pen.png" alt="">
                 </div>
             </div>
